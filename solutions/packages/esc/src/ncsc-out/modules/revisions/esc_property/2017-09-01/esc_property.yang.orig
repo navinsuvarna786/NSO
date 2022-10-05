@@ -1,0 +1,37 @@
+module esc_property {
+  namespace "http://www.cisco.com/esc_property";
+  prefix "esc_property";
+
+  import tailf-common { prefix "tailf"; }
+
+  organization "Cisco Systems";
+
+  contact "Elie El Ajaltouni <eelajalt@cisco.com>";
+
+   revision 2017-09-01 {
+    description "Adding encryted_value for keeping secrets.";
+  }
+
+  grouping property_list_definition{
+    container properties {
+      description "List of property name/value pairs";
+       list property{
+        key "name";
+        leaf name {
+          description "Name/Key of property";
+          type string;
+        }
+        choice value_type {
+            leaf value {
+              description "Value of property";
+              type string;
+            }
+            leaf encrypted_value {
+              description "Encrypted value of property";
+              type tailf:aes-cfb-128-encrypted-string;
+            }
+        }
+      }
+    }
+  }
+}

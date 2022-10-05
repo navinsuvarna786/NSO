@@ -1,0 +1,84 @@
+module esc_container_services {
+
+    namespace "http://www.cisco.com/esc/esc_containers";
+    prefix "esc_containers";
+
+    import esc_types { prefix "types"; }
+
+    organization "Cisco Systems";
+    contact "ESC Team <esc-support@cisco.com>";
+    description
+        "K8S container support provided by ESC. The intent is
+            to define a set of data structures that will enable us to support
+            the following container orchestration solutions";
+    
+    revision 2019-10-22 {
+        description "Datamodel support for K8S containers";
+    }
+
+    grouping services {
+        description "Container Service Configuration";
+        container services {
+            description
+                "Declaration of services defined for container services";
+            list service {
+                description "List of virtual services";
+                key "name";
+                leaf name {
+                    description "Name of the virtual service";
+                    type types:escname;
+                    mandatory true;
+                }
+                leaf type {
+                    description "Type of service";
+                    type types:service_type;
+                    mandatory true;
+                }
+                container ports {
+                    list port {
+                        description "List of virtual ports";
+                        key "internal_port";
+                        leaf internal_port {
+                            description "The internal port for this service";
+                            type uint16;
+                            mandatory true;
+                        }
+                        leaf protocol {
+                            description "The protocol for this service";
+                            type types:ipprotocol_t;
+                            mandatory false;
+                        }
+                        leaf external_port {
+                            description "The external port for this service";
+                            type uint16;
+                            mandatory false;
+                        }
+                    }
+                }
+                container selector {
+                    choice selectors {
+                        case cidr {
+                            leaf cidr {
+                                description "Classless Inter Domain Routing address";
+                                type string;
+                            }                
+                        }                
+                        case label {
+                            leaf vm_group {
+                                description "VM Group selector";
+                                type string;
+                            }                
+                            leaf nicid {
+                                description "Interface NIC";
+                                type uint16;
+                            }                
+                        }              
+                    }
+                }
+            }
+        }   
+    }
+}
+
+
+

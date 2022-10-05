@@ -1,0 +1,53 @@
+submodule esc_serial_ports {
+
+  belongs-to "esc_datamodel" { prefix "serial_ports"; }
+
+  organization "Cisco Systems";
+
+  contact "Shesha Sreenivasamurthy <shesha@cisco.com>";
+
+  description
+    "ESC's serial port descriptions'";
+
+  revision 2015-06-08 {
+    description "added esc_serila_ports";
+  }
+
+  grouping esc_serial_ports {
+    container serial_ports {
+      list serial_port {
+        key serial;
+        leaf serial {
+            type int16 {
+              range "0..3";
+             }
+             description "serial port number";
+         }
+
+         leaf serial_type {
+            type enumeration {
+              enum telnet;
+              enum console;
+            }
+            description "serial type, telnet or console";
+         }
+
+         must "serial_type != 'console' or (serial_type = 'console' and serial = '0')" {
+               error-message "Enter serial_type, console or telnet. Console can only be configured on serial 0. Telnet can be configured on any serial port.";
+         }
+
+         leaf service_port {
+             type int32 {
+               range "7000..8700";
+             }
+             when '../serial_type = "telnet"';
+             description "service port number";
+         }
+         must "serial_type != 'telnet' or (service_port)" {
+                              error-message "Telnet ports need to have service_port number specified";
+         }
+       }
+     }
+  }
+}
+

@@ -1,0 +1,106 @@
+module esc_file_locators {
+  namespace "http://www.cisco.com/esc_file_locators";
+  prefix "file_locators";
+
+  import ietf-inet-types { prefix "ietf-inet-types"; }
+  import esc_property { prefix "property"; }
+  import esc_types { prefix "types"; }
+
+  organization "Cisco Systems";
+
+  contact "Gordon Moore <gomoore@cisco.com>";
+
+  revision 2017-12-01 {
+    description "Extending checksum data.";
+  }
+  revision 2017-11-07 {
+    description "Making locator name mandatory.";
+  }
+  revision 2017-09-28 {
+    description
+      "adding file_server_id for remote files";
+  }
+  revision 2017-09-14 {
+    description
+      "fixing typo in leaf name";
+  }
+
+  revision 2017-09-01 {
+    description
+      "Created file_locators to allow for multiple files to be collected
+      for use in configuration and script actions.";
+  }
+
+  grouping file_locators_definition {
+    container file_locators {
+      description "List of file locators";
+      list file_locator {
+        key "name";
+        leaf name {
+          description "Name/Key of locator";
+          type string;
+          mandatory true;
+        }
+        choice file_location {
+          case local_file {
+            leaf local_path {
+              description "File path on local file system";
+              type string;
+            }
+          }
+          case remote_file {
+            container remote_file {
+              leaf file_server_id {
+                description "Name of the File Server definition to connect to.";
+                type string;
+              }
+              leaf remote_path {
+                description "URL location of the file from the root defined in the File Server base_url";
+                type ietf-inet-types:uri;
+              }
+              leaf local_target {
+                description "Local relative target directory for the remote file";
+                type string;
+              }
+              uses property:property_list_definition {
+                description
+                  "Name-value pairs to define any items required to
+                   fetch the file such as headers, credentials etc.";
+              }
+              leaf persistence {
+                description "Options for what to do with the file post operations";
+                type types:file_persistence_type;
+                default FETCH_MISSING;
+              }
+            }
+          }
+        }
+       leaf checksum {
+          status deprecated;
+          description
+            "BSD style checksum to validate file:
+             MD5 (esc_file_locators.yang) = 8ba0b770296b7f57c5f0d9e0cbfeec47
+             SHA1 (esc_file_locators.yang) = 18eb0d46906e681845a1849cc7ba3d9f4e263438
+             SHA256 (esc_file_locators.yang) = b6d4a2a8ec806ee1a8dd0cb478b8675e12831c6767c3be437192529b7e60976a
+             SHA512 (esc_file_locators.yang) = 50148d2cb076c9bebd50979757f6b2389b3dd6e31403b65047950a5d71ab7603ed471fb53bd08dc78506f1f7a96b0559e327d5c6a5d7607dae22df8f6af8238b";
+          type string;
+        }
+        uses digest;
+      }
+    }
+  }
+
+  grouping digest {
+    container digest {
+      leaf algorithm {
+        description "Algorithm for hashing";
+        type types:checksum_algorithm_type;
+      }
+      leaf checksum {
+        description "Pre-calculated checksum value for validating file after transfer";
+        type string;
+      }
+    }
+  }
+
+}

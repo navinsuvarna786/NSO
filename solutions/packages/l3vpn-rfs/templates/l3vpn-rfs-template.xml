@@ -1,0 +1,60 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <?foreach {link}?>
+    <device tags="merge">
+      <name>{$DEVICE}</name>
+      <config>
+        <vrf xmlns="urn:ios">
+          <definition>
+            <name>{$NAME}</name>
+            <rd>{$RT}</rd>
+            <route-target>
+              <export>
+                <asn-ip>{$RT}</asn-ip>
+              </export>
+              <import>
+                <asn-ip>{$RT}</asn-ip>
+              </import>
+            </route-target>
+          </definition>
+        </vrf>
+        <interface xmlns="urn:ios">
+          <GigabitEthernet>
+            <name>{$INTERFACE}</name>
+            <vrf>
+              <forwarding>{$NAME}</forwarding>
+            </vrf>
+            <ip>
+              <address>
+                <primary>
+                  <address>{$IP-ADDRESS}</address>
+                  <mask>{$MASK}</mask>
+                </primary>
+              </address>
+            </ip>
+          </GigabitEthernet>
+        </interface>
+        <router xmlns="urn:ios">
+          <bgp>
+            <as-no>65000</as-no>
+            <address-family>
+              <with-vrf>
+                <ipv4>
+                  <af>unicast</af>
+                  <vrf>
+                    <name>{$NAME}</name>
+                    <neighbor>
+                      <id>{$IP-ADDRESS}</id>
+                      <remote-as>65001</remote-as>
+                    </neighbor>
+                  </vrf>
+                </ipv4>
+              </with-vrf>
+            </address-family>
+          </bgp>
+        </router>
+      </config>
+    </device>
+    <?end?>
+  </devices>
+</config-template>

@@ -1,0 +1,52 @@
+module l3vpn-rfs {
+  namespace "http://example.com/l3vpn-rfs";
+  prefix l3vpn-rfs;
+
+  import ietf-inet-types { prefix inet; }
+  import tailf-common { prefix tailf; }
+  import tailf-ncs { prefix ncs; }
+
+  list l3vpn-rfs {
+    description "This is an L3VPN resource facing service model.";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint l3vpn-rfs-servicepoint;
+
+    list link {
+      key id;
+
+      leaf id {
+        tailf:info "Unique L3VPN link id";
+        tailf:cli-allow-range;
+        type string;
+      }
+
+      leaf device {
+        tailf:info "PE Router";
+        type string;
+      }
+
+      leaf interface {
+        tailf:info "Customer Facing Interface";
+        type string;
+      }
+
+	  leaf ip-address {
+	    tailf:info "Remote IP Address";
+	    type inet:ipv4-address;
+	  }
+
+	  leaf mask {
+	    tailf:info "Subnet mask for Remote IP Address";
+	    type inet:ipv4-address;
+	  }
+	}
+  }
+}

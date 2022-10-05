@@ -1,0 +1,58 @@
+module dmz {
+
+  namespace "http://example.com/dmz";
+  prefix dmz;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+  import router {
+    prefix router;
+  }
+  import firewall {
+    prefix firewall;
+  }
+
+  augment /ncs:services {
+
+    list dmz {
+      description "This is a DMZ service";
+
+      key name;
+      leaf name {
+        type string;
+      }
+
+      uses ncs:service-data;
+      ncs:servicepoint dmz-servicepoint;
+
+      leaf csr-name {
+        type leafref {
+          path "/ncs:devices/ncs:device/ncs:name";
+        }
+      }
+
+      leaf asa-name {
+        type leafref {
+          path "/ncs:devices/ncs:device/ncs:name";
+        }
+      }
+
+      container router {
+        presence "router";
+        uses router:router;
+      }
+
+      container firewall {
+        presence "firewall";
+        uses firewall:firewall;
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+  <services xmlns="http://tail-f.com/ns/ncs">
+    <firewall xmlns="http://example.com/firewall">
+      <name>{$NAME}</name>
+      <device>{$DEVICE}</device>
+      <?foreach {/access-list-rules}?>
+      <access-list-rules>
+        <name>{name}</name>
+        <direction>{direction}</direction>
+        <interface>{interface}</interface>
+        <action>{action}</action>
+        <protocol>{protocol}</protocol>
+        <src-ip>{src-ip}</src-ip>
+        <src-mask>{src-mask}</src-mask>
+        <src-port>{src-port}</src-port>
+        <dest-ip>{dest-ip}</dest-ip>
+        <dest-mask>{dest-mask}</dest-mask>
+        <dest-port>{dest-port}</dest-port>
+      </access-list-rules>
+      <?end?>
+    </firewall>
+  </services>
+</config>

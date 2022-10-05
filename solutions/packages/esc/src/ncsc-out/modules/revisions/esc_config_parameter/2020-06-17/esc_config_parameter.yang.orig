@@ -1,0 +1,47 @@
+module esc_config_parameter {
+
+  namespace "http://www.cisco.com/esc/esc_config_parameter";
+  prefix "esc_config_parameter";
+
+  import tailf-common { prefix "tailf"; }
+  import esc_types { prefix "types"; }
+
+  organization "Cisco Systems";
+
+  description
+    "ESC Config parameters config";
+
+   revision 2020-06-17 {
+    description "ESC Config parameter config support";
+  }
+
+/*
+ * This represents the ESC Config parameter config descriptions.
+ */
+  grouping esc_config_parameter {
+    container config_parameters {
+      list config_parameter {
+        key "category property";
+        description "List of config parameters.";
+
+        leaf category {
+          description "Type of config param category: VAGRANT, OPENSTACK, NB, etc";
+          tailf:cli-expose-key-name;
+          type types:escname;
+          mandatory true;
+        }
+        leaf property {
+          description "A unique id to represent a VIM connection.";
+          tailf:cli-expose-key-name;
+          type types:escname;
+          mandatory true;
+        }
+        leaf value {
+         description "config property value to set.";
+         type string;
+         mandatory true;
+        }
+      }
+    }
+  }
+}

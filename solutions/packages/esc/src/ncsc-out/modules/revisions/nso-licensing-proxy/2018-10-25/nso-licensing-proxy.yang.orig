@@ -1,0 +1,26 @@
+module nso-licensing-proxy {
+
+  namespace "http://cisco.com/yang/nso/licensing-proxy";
+  prefix "licensing-proxy";
+
+  revision 2018-10-25 {
+    description
+      "Added smart licensing";
+  }
+
+  notification nso-licensing-proxy {
+    description "NSO licensing notification";
+    leaf unique-id {
+      type string;
+    }
+    list entitlement {
+      key "id";
+      leaf id {
+        type string;
+      }
+      leaf n {
+        type uint64;
+      }
+    }
+  }
+}

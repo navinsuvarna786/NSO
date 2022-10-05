@@ -1,0 +1,14 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+                 servicepoint="hostname">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{/device}</name>
+      <config>
+        <hostname xmlns="http://cisco.com/ned/asa">{/hostname}</hostname>
+	<hostname xmlns="urn:ios">{/hostname}</hostname>
+        <hostname xmlns="http://tail-f.com/ned/cisco-ios-xr">{/hostname}</hostname>
+	<hostname xmlns="http://tail-f.com/ned/cisco-nx">{/hostname}</hostname>
+      </config>
+    </device>
+  </devices> 
+</config-template>

@@ -1,0 +1,118 @@
+module esc_locators {
+
+
+  namespace "http://www.cisco.com/esc/esc_locators";
+  prefix "esc_locators";
+
+  import esc_types { prefix "types"; }
+
+  organization "Cisco Systems";
+
+  contact "Tony Clayton <anclayto@cisco.com>";
+
+  description " ESC locators grouping for specifying vim-specific resource locators.";
+
+  revision 2018-05-25 {
+      description "Adding vim_vdc";
+  }
+  revision 2018-05-11 {
+      description "Adding network_vim_locators and refactoring to allow better re-use of common groupings";
+  }
+  revision 2018-02-14 {
+      description "Adding vim_region.";
+  }
+  revision 2017-03-10 {
+      description "Created locator to support multi vim deployment.";
+  }
+  revision 2016-03-16 {
+      description "Creating ESC locators.";
+  }
+
+
+  grouping extensible_locators {
+    container locators {
+      description
+        "Contains VIM-specific resource locator properties for VMWARE multi VDC
+        support in single VIM deployments.";
+
+      uses vdc_locator_info;
+      uses vds_locator_info;
+    }
+  }
+  grouping vdc_locator_info {
+    leaf datacenter {
+
+      description "Specifies the name of the target datacenter of the resource.";
+      type string;
+
+    }
+  }
+  grouping vds_locator_info {
+    leaf switch_name {
+
+      description "Specifies the name of the target switch for a network resource";
+      type string;
+
+    }
+  }
+
+  grouping network_vim_locators {
+    container locator {
+      presence
+        "Indicates multi VIM capable configuration with VIM explicitly defined.";
+      description
+        "Information to identify the target VIM and VIM related config to
+        realize the configuration for the network.";
+
+      must "../../../../../vim_mapping[text()='false']"
+      {
+        error-message "tenant vim_mapping must be set to false";
+      }
+
+      uses common_locator_info;
+    }
+  }
+
+  grouping locators {
+    container locator {
+      presence
+        "Indicates multi VIM capable configuration with VIM explicitly defined.";
+      description
+        "Information to identify the target VIM and VIM related config to
+        realize the configuration like deployment.";
+
+      uses common_locator_info;
+    }
+  }
+
+  grouping common_locator_info {
+
+    leaf vim_id {
+
+      description
+          "Specifies the ESC defined id of the target VIM to apply the
+          configuration.";
+      type types:escname;
+      mandatory true;
+    }
+
+    leaf vim_project {
+      description
+          "Specifies the name of the target project to apply the configuration.";
+      type string;
+    }
+
+    leaf vim_region {
+      description
+          "Specifies the name of the target region to apply the configuration.";
+      type string;
+    }
+
+    leaf vim_vdc {
+      description
+          "Specifies the name of the target vDC to apply the configuration.";
+      type string;
+    }
+
+  }
+}

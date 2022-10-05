@@ -1,0 +1,15 @@
+  <config xmlns="http://tail-f.com/ns/config/1.0">
+  <services xmlns="http://tail-f.com/ns/ncs">
+    <router xmlns="http://com/example/router">
+      <name>{$NAME}</name>
+      <device>{$DEVICE}</device>
+      <?foreach {/routes}?>
+      <routes>
+        <network>{network}</network>
+        <mask>{mask}</mask>
+        <gateway>{gateway}</gateway>
+      </routes>
+      <?end?>
+    </router>
+  </services>
+</config>

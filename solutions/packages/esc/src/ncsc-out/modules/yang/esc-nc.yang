@@ -1,0 +1,18 @@
+module esc-nc {
+  yang-version 1.1;
+  namespace "http://tail-f.com/ns/ned-id/esc-nc";
+  prefix esc-nc;
+
+  import tailf-common {
+    prefix tailf;
+  }
+
+  import tailf-ncs-ned {
+    prefix ned;
+  }
+
+  identity esc-nc {
+    tailf:abstract;
+    base ned:netconf-ned-id;
+  }
+}

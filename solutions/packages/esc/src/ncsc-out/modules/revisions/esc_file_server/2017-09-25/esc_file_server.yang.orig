@@ -1,0 +1,55 @@
+module esc_file_server {
+
+  namespace "http://www.cisco.com/esc/esc_file_server";
+  prefix "esc_file_server";
+
+  import esc_types { prefix "types"; }
+  import esc_property { prefix "property"; }
+  import tailf-common { prefix "tailf"; }
+  import ietf-inet-types { prefix "ietf-inet-types"; }
+
+  organization "Cisco Systems";
+
+  description
+    "File Server details";
+
+  revision 2017-09-25 {
+    description "defining file server configuration";
+  }
+
+  grouping esc_file_server {
+   
+    container file_servers {
+
+    	list file_server {
+          key "id";
+          description "List of file servers.";
+          leaf id {
+            description "A unique identifier name to represent a file server";
+            type types:escname;
+            mandatory true;
+          }
+
+          leaf base_url {
+            description "URI for the server";
+            type ietf-inet-types:uri;
+            mandatory true;
+          }
+
+          leaf file_server_user {
+            description "username credential for access to server";
+            type types:escname;
+          }
+
+          leaf file_server_password {
+            description "password for server access";
+            type tailf:aes-cfb-128-encrypted-string;
+          }  		
+		  /*
+ 		   * For extensibility - potentially add server specific configurations such as access tokens, header params.
+ 		   */
+          uses property:property_list_definition;
+       }
+    }
+  }
+}
